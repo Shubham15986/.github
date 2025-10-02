@@ -1,13 +1,11 @@
 ---
 name: 🤖 Pull Request Labeler
 
-"on":
+on:
   pull_request:
-    types:
-      - opened
-      - synchronize
-    branches:
-      - main
+    types: [opened, synchronize]
+    paths:
+      - 'src/**'
 
 permissions:
   contents: read
@@ -19,11 +17,10 @@ jobs:
       contents: read
       pull-requests: write
     runs-on: ubuntu-latest
-
     steps:
-      - name: Label Pull Request
+      - name: Pull Request Labeler
         uses: actions/labeler@v6
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          configuration-path: .github/labeler.yml
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          configuration-path: '.github/labeler.yml'
           sync-labels: true
