@@ -1,26 +1,33 @@
 ---
-name: 🤖 Pull Request Labeler
+name: "🤖 Pull Request Labeler"
 
-on:
+"on":
+  workflow_dispatch: {}  # Allow manual triggering
   pull_request:
-    types: [opened, synchronize]
-    paths:
-      - 'src/**'
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
+      - master
 
 permissions:
   contents: read
 
 jobs:
   label:
-    name: 🏷️ Auto-Label Pull Request
-    permissions:
-      contents: read
-      pull-requests: write
+    name: "🏷️ Auto-Label Pull Request"
     runs-on: ubuntu-latest
+    timeout-minutes: 10  # Add timeout for safety
+    permissions:
+      contents: read  # Required for actions/labeler
+      pull-requests: write  # Required for labeling PRs
+
     steps:
-      - name: Pull Request Labeler
+      - name: "Run Labeler"
         uses: actions/labeler@v6
         with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
-          configuration-path: '.github/labeler.yml'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
           sync-labels: true
